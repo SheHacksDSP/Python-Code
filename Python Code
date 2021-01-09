@@ -1,0 +1,108 @@
+import random
+
+# variable for the starting value of the range
+start = None
+# checks that the starting value of the range is an integer
+range_start = True
+# variable for ending value of the range
+end = None
+# checks that the ending value of the range is an integer
+range_end = True
+# variable for the random number the user must guess
+number = None
+# the variable for the user's most recent guess
+guess = None
+# used to continually check the guess every time the guess is updated
+looping_mechanism = True
+# checks to see if user guess is an integer
+integer_checker = None
+# variable to keep track of the number of guesses made during the game
+score_count = 0
+
+print("Welcome to Name That Number!\nPlay on your own or challenge your friends!\nChallenge yourself to get the lowest score possible.\nGood Luck! :)")
+print(" ")
+
+# asking the user for a starting for the range and ensuring that it is an integer. If the input is not a integer, it asks for another input.
+start = input("Pick a starting number for your range: ").strip()
+
+while range_start == True:
+
+    if start.find("-") != -1 and start.replace("-", "").isdigit():
+        start = int(start)
+        range_start = False
+
+    elif start.isdigit():
+        start = int(start)
+        range_start = False
+
+    else:
+        start = input("input is not valid. Please enter an integer: ").strip()
+
+# asking the user for an ending for the range and ensuring it is an integer. Works for both positive and negative integers.
+end = input("Pick an ending number for your range: ").strip()
+
+while range_end == True:
+
+    if end.find("-") != -1 and end.replace("-", "").isdigit():
+        end = int(end)
+        range_end = False
+
+    elif end.isdigit():
+        end = int(end)
+        range_end = False
+
+    else:
+        end = input("input is not valid. Please enter an integer: ").strip()
+
+# tells user to choose a value of end that is larger than start in order to create a range
+while end <= start:
+    end = int(input("Please choose another number that is greater than your starting value: ").strip())
+    range_end = True
+
+
+# chooses a random number for the user to guess
+number = (random.randint(int(start), int(end)))
+
+# asks user to guess a number
+guess = input("Guess a number between " + str(start) + " and " + str(end) + ": ").strip()
+
+# continuously checks that the guess is an integer, and that negative numbers do not result in an error
+while looping_mechanism == True:
+    integer_checker = True
+    while integer_checker == True:
+        if guess.find("-")!=-1 and guess.replace("-","").isdigit():
+            guess = int(guess)
+            integer_checker = False
+            
+        elif guess.isdigit():
+            guess = int(guess)
+            integer_checker = False
+
+        else:
+            guess = input("Error. input is not valid. Please enter an integer: ").strip()
+            score_count = score_count + 1
+
+    # prevents user from choosing a number outside of the range
+    if int(guess) < start or int(guess) > end:
+        guess =input("Please choose a number that is within your range: ").strip()
+        score_count = score_count + 1
+
+    # tells user whether their guess is higher or lower than the answer
+    elif int(guess) > number and int(guess) <= end:
+        print("Incorrect. The number is lower")
+        guess = input("Guess another number between " + str(start) + " and " + str(end) + ": ").strip()
+        score_count = score_count + 1
+
+    elif int(guess) < number and int(guess) >= start:
+        print("Incorrect. The number is higher")
+        guess = input("Guess another number between " + str(start) + " and " + str(end) + ": ").strip()
+        score_count = score_count + 1
+
+    # congratulates the user for guessing the correct answer
+    elif int(guess) == number:
+        print("Congratulations! You guessed the number :) \nThe number of guesses that it took was " + str(
+            score_count + 1) + "!")
+        print("Thanks for Playing!")
+
+        # stops the loop from continuously running
+        looping_mechanism = False
